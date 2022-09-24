@@ -5,6 +5,7 @@ import lombok.Data;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 
 @Entity
@@ -12,9 +13,9 @@ import java.time.LocalDateTime;
 public class Post {
     @Id
     @GeneratedValue
-    private int id;
+    private Integer id;
 
     private String title;
     private String content;
-    private LocalDateTime createdTime;
+    private LocalDate createdTime;
 }
