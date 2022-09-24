@@ -18,4 +18,5 @@ public class Post {
     private String title;
     private String content;
     private LocalDate createdTime;
+    private Integer userId;
 }

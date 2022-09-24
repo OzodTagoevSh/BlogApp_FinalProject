@@ -38,4 +38,9 @@ public class PostController {
     public PostDto getPostById(@PathVariable Integer id) throws Exception {
         return postService.getById(id);
     }
+
+    @GetMapping("/{userId}")
+    public List<PostDto> getPostByUserId(@PathVariable Integer userId) {
+        return postService.postsByUser(userId);
+    }
 }

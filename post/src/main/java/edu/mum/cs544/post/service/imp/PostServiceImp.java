@@ -9,6 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -55,5 +56,14 @@ public class PostServiceImp implements PostService {
     public PostDto getById(Integer id) throws Exception {
         Post post = repository.findById(id).orElseThrow(() -> new Exception("Post not Found"));
         return modelMapper.map(post, PostDto.class);
+    }
+
+    @Override
+    public List<PostDto> postsByUser(Integer userId) {
+        List<Post> postsByUser = repository.findAllByUserId(userId);
+        List<PostDto> result = postsByUser.stream()
+                .map(p -> modelMapper.map(p, PostDto.class))
+                .collect(Collectors.toList());
+        return result;
     }
 }

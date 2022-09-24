@@ -5,10 +5,7 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.RequiredArgsConstructor;
 
-import javax.persistence.Temporal;
-import javax.persistence.TemporalType;
 import java.time.LocalDate;
-import java.time.LocalDateTime;
 
 @Data
 @AllArgsConstructor
@@ -18,4 +15,5 @@ public class PostDto {
     private String content;
     @JsonFormat(pattern = "yyyy-MM-dd")
     private LocalDate createdTime;
+    private Integer userId;
 }
