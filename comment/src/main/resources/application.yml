@@ -6,7 +6,7 @@ spring:
   datasource:
     username: postgres
     password: 7166
-    url: jdbc:postgresql://localhost:5433/post
+    url: jdbc:postgresql://localhost:5433/comment
 jpa:
   hibernate:
     ddl-auto: create-drop
