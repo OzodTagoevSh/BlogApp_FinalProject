@@ -1,6 +1,8 @@
 package edu.mum.cs544.post.service.imp;
 
 import edu.mum.cs544.post.dto.PostDto;
+import edu.mum.cs544.post.dto.PostRequest;
+import edu.mum.cs544.post.dto.PostResponse;
 import edu.mum.cs544.post.entity.Post;
 import edu.mum.cs544.post.repository.PostRepository;
 import edu.mum.cs544.post.service.PostService;
@@ -8,62 +10,66 @@ import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.time.LocalDateTime;
-import java.util.ArrayList;
+import java.time.LocalDate;
 import java.util.List;
-import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
 public class PostServiceImp implements PostService {
     @Autowired
-    private PostRepository repository;
-
+    private PostRepository postRepository;
     @Autowired
     private ModelMapper modelMapper;
 
     @Override
-    public List<PostDto> getAll() {
-        List<Post> posts = repository.findAll();
-        return posts.stream()
-                .map(post -> modelMapper.map(post, PostDto.class))
-                .collect(Collectors.toList());
+    public PostResponse getAll() {
+        return new PostResponse(true, postRepository.findAll());
     }
 
     @Override
-    public void addPost(PostDto post) {
-        repository.save(modelMapper.map(post, Post.class));
+    public PostResponse addPost(Integer userId, PostRequest postRequest) {
+        LocalDate date = LocalDate.now();
+        Post post = postRepository.save(new Post(postRequest.getTitle(), postRequest.getContent(), date, date, userId));
+        return new PostResponse(true, "Post created successfully!", modelMapper.map(post, PostDto.class));
     }
 
     @Override
-    public void deleteById(Integer id) throws Exception {
-        Post post = repository.findById(id).orElseThrow(() -> new Exception("Post not Found"));
-        repository.deleteById(id);
+    public PostResponse deleteById(Integer id) {
+        Post post = postRepository.findById(id).orElse(null);
+        if(post == null)
+            return new PostResponse(false, "Post not found!", null);
+        postRepository.delete(post);
+        return new PostResponse(true, "Post deleted successfully!", null);
     }
 
     @Override
-    public void updatePost(Integer id, PostDto postDto) {
-        Post post = repository.findById(id).orElse(null);
-        if(post != null) {
-            post.setTitle(postDto.getTitle());
-            post.setContent(postDto.getContent());
-            post.setCreatedTime(postDto.getCreatedTime());
-            repository.save(post);
-        }
+    public PostResponse updatePost(Integer id, PostRequest postRequest) {
+        Post post = postRepository.findById(id).orElse(null);
+        if(post == null)
+            return new PostResponse(false, "Post not found!", null);
+        LocalDate date = LocalDate.now();
+        post.setTitle(postRequest.getTitle());
+        post.setContent(postRequest.getContent());
+        post.setUpdatedTime(date);
+        postRepository.save(post);
+        return new PostResponse(true, "Post updated successfully!", null);
     }
 
     @Override
-    public PostDto getById(Integer id) throws Exception {
-        Post post = repository.findById(id).orElseThrow(() -> new Exception("Post not Found"));
-        return modelMapper.map(post, PostDto.class);
+    public PostResponse getById(Integer id) {
+        Post post = postRepository.findById(id).orElse(null);
+        if(post == null)
+            return new PostResponse(false, "Post not found!", null);
+        postRepository.delete(post);
+        return new PostResponse(true, "Post deleted successfully!", null);
     }
 
     @Override
-    public List<PostDto> postsByUser(Integer userId) {
-        List<Post> postsByUser = repository.findAllByUserId(userId);
-        List<PostDto> result = postsByUser.stream()
-                .map(p -> modelMapper.map(p, PostDto.class))
-                .collect(Collectors.toList());
-        return result;
+    public PostResponse postsByUser(Integer userId) {
+        List<Post> posts = postRepository.findAllByUserId(userId);
+        if(posts == null)
+            return new PostResponse(false, "Post not found for this user!", null);
+        List<PostDto> result = posts.stream().map(p -> modelMapper.map(p, PostDto.class)).toList();
+        return new PostResponse(true, "Posts found!", result);
     }
 }

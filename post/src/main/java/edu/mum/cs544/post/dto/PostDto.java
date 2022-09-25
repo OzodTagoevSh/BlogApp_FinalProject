@@ -15,5 +15,7 @@ public class PostDto {
     private String content;
     @JsonFormat(pattern = "yyyy-MM-dd")
     private LocalDate createdTime;
+    @JsonFormat(pattern = "yyyy-MM-dd")
+    private LocalDate updatedTime;
     private Integer userId;
 }

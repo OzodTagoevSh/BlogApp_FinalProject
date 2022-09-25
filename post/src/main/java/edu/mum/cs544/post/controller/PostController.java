@@ -1,12 +1,12 @@
 package edu.mum.cs544.post.controller;
 
-import edu.mum.cs544.post.dto.PostDto;
+import edu.mum.cs544.post.dto.PostRequest;
+import edu.mum.cs544.post.dto.PostResponse;
 import edu.mum.cs544.post.service.PostService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.List;
+import javax.validation.Valid;
 
 @RestController
 @RequestMapping("/posts")
@@ -15,32 +15,32 @@ public class PostController {
     private PostService postService;
 
     @GetMapping
-    public List<PostDto> getAll() {
+    public PostResponse getAll() {
         return postService.getAll();
     }
 
-    @PostMapping
-    public void addPost(@RequestBody PostDto postDto) {
-        postService.addPost(postDto);
+    @PostMapping("/{userId}")
+    public PostResponse addPost(@PathVariable Integer userId, @Valid @RequestBody PostRequest postRequest) {
+        return postService.addPost(userId, postRequest);
     }
 
-    @PostMapping("/{id}")
-    public void updatePost(@PathVariable Integer id, @RequestBody PostDto postDto) {
-        postService.updatePost(id, postDto);
+    @PutMapping("/{id}")
+    public PostResponse updatePost(@PathVariable Integer id, @RequestBody PostRequest postRequest) {
+        return postService.updatePost(id, postRequest);
     }
 
     @DeleteMapping("/{id}")
-    public void deletePost(@PathVariable Integer id) throws Exception {
-        postService.deleteById(id);
+    public PostResponse deletePost(@PathVariable Integer id) {
+        return postService.deleteById(id);
     }
 
     @GetMapping("/{id}")
-    public PostDto getPostById(@PathVariable Integer id) throws Exception {
+    public PostResponse getPostById(@PathVariable Integer id) {
         return postService.getById(id);
     }
 
     @GetMapping("/{userId}")
-    public List<PostDto> getPostByUserId(@PathVariable Integer userId) {
+    public PostResponse getPostByUserId(@PathVariable Integer userId) {
         return postService.postsByUser(userId);
     }
 }
