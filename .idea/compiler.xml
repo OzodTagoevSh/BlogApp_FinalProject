@@ -7,23 +7,35 @@
         <sourceOutputDir name="target/generated-sources/annotations" />
         <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
         <outputRelativeToContentRoot value="true" />
-        <module name="comment" />
+        <module name="cloud-config" />
+        <module name="auth-service" />
         <module name="post" />
+        <module name="api-gateway" />
+        <module name="comment" />
         <module name="user" />
+        <module name="service-discovery" />
       </profile>
     </annotationProcessing>
     <bytecodeTargetLevel>
+      <module name="api-gateway" target="17" />
+      <module name="auth-service" target="17" />
       <module name="BlogApp" target="17" />
+      <module name="cloud-config" target="17" />
       <module name="comment" target="17" />
       <module name="post" target="17" />
+      <module name="service-discovery" target="17" />
       <module name="user" target="17" />
     </bytecodeTargetLevel>
   </component>
   <component name="JavacSettings">
     <option name="ADDITIONAL_OPTIONS_OVERRIDE">
       <module name="BlogApp" options="-parameters" />
+      <module name="api-gateway" options="-parameters" />
+      <module name="auth-service" options="-parameters" />
+      <module name="cloud-config" options="-parameters" />
       <module name="comment" options="-parameters" />
       <module name="post" options="-parameters" />
+      <module name="service-discovery" options="-parameters" />
       <module name="user" options="-parameters" />
     </option>
   </component>
