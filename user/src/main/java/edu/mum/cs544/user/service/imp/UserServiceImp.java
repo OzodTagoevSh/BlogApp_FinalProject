@@ -24,8 +24,6 @@ public class UserServiceImp implements UserService {
     private RoleRepository roleRepository;
     @Autowired
     private ModelMapper modelMapper;
-    @Autowired
-    private BCryptPasswordEncoder bCryptPasswordEncoder;
 
     @Override
     public UserResponse getAll() {
@@ -48,7 +46,7 @@ public class UserServiceImp implements UserService {
         if(userRepository.existsByUsername(userRequest.getUsername()))
             return new UserResponse(false, "Username has already taken!", null);
         User user = userRepository.save(new User(userRequest.getUsername(), userRequest.getFirstname(), userRequest.getLastname(),
-                bCryptPasswordEncoder.encode(userRequest.getPassword()), Collections.singleton(role)));
+                userRequest.getPassword(), Collections.singleton(role)));
         return new UserResponse(true, "User saved successfully!", modelMapper.map(user, UserDto.class));
     }
 
@@ -79,7 +77,7 @@ public class UserServiceImp implements UserService {
         User user = userRepository.findByUsername(userLogin.getUsername());
         if (user == null)
             return new UserResponse(false, "User not found!", null);
-        if(!bCryptPasswordEncoder.matches(user.getPassword(), userLogin.getPassword()))
+        if(!(user.getPassword().equals(userLogin.getPassword())))
             return new UserResponse(false, "Bad credentials!", null);
         return new UserResponse(true, "User found!", modelMapper.map(user, UserDto.class));
     }

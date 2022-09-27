@@ -17,4 +17,8 @@ public class Role {
     @GeneratedValue
     private Integer id;
     private String name;
+
+    public Role(String name) {
+        this.name = name;
+    }
 }
