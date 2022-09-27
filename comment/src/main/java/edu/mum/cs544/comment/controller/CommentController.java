@@ -37,12 +37,12 @@ public class CommentController {
         return commentService.getById(id);
     }
 
-    @GetMapping("/{userId}")
+    @GetMapping("/user/{userId}")
     public CommentResponse commentsByUserId(@PathVariable Integer userId) {
         return commentService.commentsByUser(userId);
     }
 
-    @GetMapping("/{postId}")
+    @GetMapping("/post/{postId}")
     public CommentResponse commentsByPostId(@PathVariable Integer postId) {
         return commentService.commentsByPostId(postId);
     }
