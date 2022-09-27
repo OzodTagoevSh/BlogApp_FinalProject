@@ -9,7 +9,7 @@ import java.util.List;
 @Data
 @SuperBuilder
 public class PostComments {
-    private Long id;
+    private Integer id;
     private String title;
     private String content;
     private User user;

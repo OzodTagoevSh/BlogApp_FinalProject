@@ -1,5 +1,6 @@
 package edu.mum.cs544.post.controller;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
 import edu.mum.cs544.post.dto.PostRequest;
 import edu.mum.cs544.post.dto.PostResponse;
 import edu.mum.cs544.post.service.PostService;
@@ -24,23 +25,23 @@ public class PostController {
         return postService.addPost(userId, postRequest);
     }
 
-    @PutMapping("/{id}")
-    public PostResponse updatePost(@PathVariable Integer id, @RequestBody PostRequest postRequest) {
-        return postService.updatePost(id, postRequest);
+    @PutMapping("/{postId}")
+    public PostResponse updatePost(@PathVariable Integer postId, @RequestHeader(value = "id") Integer userId, @RequestBody PostRequest postRequest) {
+        return postService.updatePost(userId, postId, postRequest);
     }
 
-    @DeleteMapping("/{id}")
-    public PostResponse deletePost(@PathVariable Integer id) {
-        return postService.deleteById(id);
+    @DeleteMapping("/{postId}")
+    public PostResponse deletePost(@PathVariable Integer postId, @RequestHeader(value = "id") Integer userId) {
+        return postService.deletePost(userId, postId);
     }
 
     @GetMapping("/{id}")
-    public PostResponse getPostById(@PathVariable Integer id) {
-        return postService.getById(id);
+    public PostResponse getPostById(@PathVariable Integer id) throws JsonProcessingException {
+        return postService.getPost(id);
     }
 
-    @GetMapping("/{userId}")
-    public PostResponse getPostByUserId(@PathVariable Integer userId) {
+    @GetMapping("/me")
+    public PostResponse getPostByUserId(@RequestHeader(value = "id") Integer userId) {
         return postService.postsByUser(userId);
     }
 }
